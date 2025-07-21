@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        /* General page styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Container for the content */
+        .confirmation-container {
+            text-align: center;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        /* Heading styling */
+        h1 {
+            font-size: 32px;
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+
+        /* Confirmation message */
+        p {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Button styling */
+        .btn {
+            padding: 15px 25px;
+            font-size: 18px;
+            color: #fff;
+            background-color: #3498db;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Footer text */
+        .footer {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #555;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .confirmation-container {
+                width: 90%;
+                padding: 30px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .btn {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <h1>Your Order is Confirmed!</h1>
+        <p>Thank you for shopping with us. Your order has been successfully processed.</p>
+        <a href="/home" class="btn">Go to Homepage</a>
+        <div class="footer">
+            <p>Need help? <a href="/contact">Contact us</a></p>
+        </div>
+    </div>
+</body>
+</html>

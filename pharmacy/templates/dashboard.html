@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Online Pharmacy Dashboard</title>
+    <style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #000; /* Changed text color to black */
+    height: 100vh; /* Ensure the body takes full viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
+    background-image: url('https://wallpapercave.com/wp/wp10563956.jpg');
+    background-size: cover; /* Ensure the image covers the entire screen */
+    background-position: center;
+    background-attachment: fixed; /* Prevents background from moving */
+}
+
+/* Darker color for the title */
+h1 {
+    text-align: center;
+    font-size: 40px;
+    margin-top: 20px;
+    color: #010a08; /* Fresh turquoise color for better contrast */
+    font-weight: bold;
+}
+
+/* Welcome Text */
+.welcome-text {
+    text-align: center;
+    font-size: 35px;
+    margin-top: 20px;
+    color: #000; /* Black text for better visibility */
+    font-weight: bold;
+}
+
+/* Container for the entire dashboard */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    gap: 30px;
+    text-align: center;
+    z-index: 1; /* Ensure the dashboard is above the background */
+}
+
+/* Section for the Online Pharmacy details (Updated to white background) */
+.pharmacy-info {
+    background-color: rgba(255, 255, 255, 0.9); /* White background with transparency */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    width: 80%;
+    max-width: 800px;
+    margin-bottom: 20px;
+}
+
+.pharmacy-info h2 {
+    font-size: 28px;
+    color: #000; /* Black text for the heading */
+    margin-bottom: 10px;
+}
+
+.pharmacy-info p {
+    font-size: 18px;
+    color: #000; /* Changed text color to black */
+    line-height: 1.6;
+}
+
+/* Dashboard cards (Product, Logout cards, etc. - white background) */
+.dashboard-card {
+    background-color: rgba(255, 255, 255, 0.9); /* White card background with transparency */
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    width: 90%;
+    max-width: 350px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    text-align: center;
+    color: #000; /* Black text for visibility */
+}
+
+/* Links in dashboard cards */
+.dashboard-card a {
+    text-decoration: none;
+    color: #090601; /* Vibrant yellow for links */
+    font-weight: bold;
+    font-size: 20px;
+    transition: color 0.3s ease;
+}
+
+/* Image styling inside cards */
+.dashboard-card img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+}
+
+/* Hover effect for the cards */
+.dashboard-card:hover {
+    transform: translateY(-10px);
+    background-color: #f0f0f0; /* Light gray background on hover */
+}
+
+.dashboard-card:hover a {
+    color: #0c0801; /* Brighter yellow-orange on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .pharmacy-info p {
+        font-size: 16px;
+    }
+
+    .dashboard-card {
+        width: 90%;
+        font-size: 16px;
+    }
+}
+  /* General page styling */
+ </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Pharmacy Info Section -->
+        <div class="pharmacy-info">
+            <h2>About Our Online PharmEasy</h2>
+            <p>Welcome to our online pharmacy where you can easily browse and purchase a wide variety of medications, health supplements, and wellness products. We provide fast, reliable, and discreet delivery to your doorstep.</p>
+            <p>With secure payment options and expert advice, we make sure you have access to everything you need for your health in one place.</p>
+        </div>
+
+        <!-- Dashboard Section -->
+        <h1>Welcome to Your Dashboard</h1>
+
+        <!-- Dashboard Cards with Images -->
+        <div class="dashboard-card">
+            <img src="https://www.pyxuspharmaceuticals.com/wp-content/uploads/2022/12/Therapeutic-Areas-840x562.jpg" alt="Products Icon" />
+            <p><a href="/products/">Medicines</a></p>
+        </div>
+        <div class="dashboard-card">
+            <img src="https://th.bing.com/th/id/OIP.OmhqM1nXNoMlw5OOJzw-EAHaE7?w=270&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Account Info Icon" />
+            <p><a href="/accountinfo">Account Information</a></p>
+        </div>
+        <div class="dashboard-card">
+            <img src="https://th.bing.com/th/id/OIP.arD8uY5ZW63B0-nR_94aiAHaHa?w=193&h=193&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Cart Icon" />
+            <p><a href="/carts">Cart</a></p>
+        </div>
+        <div class="dashboard-card">
+            <img src="https://th.bing.com/th/id/R.3a45577faf76fa07b202241c2796e836?rik=mo7P4FoTzigCOA&riu=http%3a%2f%2fccbhs.org%2fwp-content%2fuploads%2f2020%2f09%2fmail-order-online-pharmacies.jpg&ehk=ZoTqeuuA0ZYqJbg0tA6oa0XxVfUPyWzND8YsHffC%2fmI%3d&risl=&pid=ImgRaw&r=0" alt="Orders Icon" />
+            <p><a href="/orders">Orders</a></p>
+        </div>
+        <div class="dashboard-card">
+            <img src="https://th.bing.com/th/id/OIP.XqgSq7PHcbZpiBfjhzpfFwHaHa?w=179&h=180&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="Logout Icon" />
+            <p><a href="/logout">Logout</a></p>
+        </div>
+    </div>
+</body>
+</html>

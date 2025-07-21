@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders Manager</title>
+    <style>
+        /* General styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        h2, h3 {
+            text-align: center;
+            color: #34495e;
+        }
+
+        h3 {
+            margin-top: 20px;
+        }
+
+        /* Order Box Styling */
+        .order-box {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-box h4 {
+            color: #2980b9;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        /* Date and Address Section */
+        .date-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .date-container p {
+            font-size: 14px;
+            color: #7f8c8d;
+            margin: 5px 0;
+            width: 45%;
+        }
+
+        /* Order Details */
+        .order-details h4 {
+            color: #2c3e50;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .order-details ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .order-details ul li {
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-details p {
+            margin: 5px 0;
+        }
+
+        /* Total Price Styling */
+        .order-details h3 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #e74c3c;
+            text-align: right;
+        }
+
+        /* Update Order Form */
+        .update-order-form {
+            display: flex;
+            align-items: center;
+            margin-top: 15px;
+            justify-content: space-between;
+        }
+
+        .update-order-form label {
+            font-size: 16px;
+            margin-right: 10px;
+        }
+
+        .update-order-form select {
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .update-order-form button {
+            background-color: #2980b9;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .update-order-form button:hover {
+            background-color: #3498db;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .date-container p {
+                width: 100%;
+            }
+
+            .update-order-form {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .update-order-form select,
+            .update-order-form button {
+                width: 100%;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Welcome to Orders Management Page</h2>
+    <h3>Active Orders:</h3>
+
+    {% for order in orders %}
+    {% if order.status != "Completed" and order.status != "Cancelled" %}
+    <div class="order-box">
+        <h4>Order ID: {{ order.id }}</h4>
+        <div class="date-container">
+            <p>Date Placed: {{ order.created_at }}</p>
+            <!-- Access full shipping address -->
+            <p>Shipping Address: {{ order.shipping_address.address }}, {{ order.shipping_address.city }}, {{ order.shipping_address.state }}, {{ order.shipping_address.pincode }}</p>
+            <p>Contact No. : {{ order.contact }}</p>
+            <p>Name: {{ order.shipping_address.name }}</p>
+            <!-- Print the current status -->
+            <p>Current Status: {{ order.status }}</p>
+        </div>
+        <div class="order-details">
+            <h4>Products:</h4>
+            <ul>
+                {% for item in order.orderitem_set.all %}
+                <li>
+                    <p><strong>Product:</strong> {{ item.product.name }}</p>
+                    <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                    <p><strong>Price:</strong> ₹{{ item.price }}</p>
+                </li>
+                {% endfor %}
+            </ul>
+            <!-- Display total price for the order -->
+            <h3>Total Price: ₹{{ order.total_price }}</h3>
+        </div>
+        <!-- Update order status form -->
+        <form class="update-order-form" method="POST" action="{% url 'update_order_status' order.id %}">
+            {% csrf_token %}
+            <label for="new-status">New Status:</label>
+            <select name="new_status" id="new-status">
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="On Hold">On Hold</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+            <button type="submit">Update</button>
+        </form>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+</body>
+</html>

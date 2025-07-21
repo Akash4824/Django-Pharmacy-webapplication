@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Your Orders</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        /* General styling */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            background-image: url('https://images.creativemarket.com/0.1.0/ps/5585240/1820/1213/m1/fpnw/wm1/ojllxtw3w0mlcs7jlvmqyvqaftymtzzgukonwsi0adc9dunsnu2atg2bdmwsk6lw-.jpg?1545219304&s=43868aecc799446e0a6907373cb6c41b');
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Container for the page content */
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+
+        /* Heading styling */
+        h1 {
+            text-align: center;
+            font-size: 36px;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+
+        /* Order list styling */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        /* Styling for each order */
+        .order {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Order ID and Status */
+        .order h3 {
+            color: #2980b9;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .order p {
+            color: #021415;
+            font-size: 16px;
+            margin: 5px 0;
+        }
+
+        /* Product list within an order */
+        .order ul {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .order ul li {
+            margin-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .order ul li p {
+            margin: 5px 0;
+        }
+
+        /* Total price styling */
+        .total-price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .order {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .total-price {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Your Orders</h1>
+        <ul>
+            {% for order in orders %}
+            <li class="order">
+                <h3>Order ID: {{ order.id }}</h3>
+                <p>Status: <strong>{{ order.status }}</strong></p>
+                <p>Date Placed: {{ order.created_at }}</p>
+                <p>Name: {{ order.shipping_address.name }}</p>
+                <p>Shipping Address: {{ order.shipping_address.address }}, {{ order.shipping_address.city }}, {{ order.shipping_address.state }}, {{ order.shipping_address.pincode }}</p>
+                <h4>Products:</h4>
+                <ul>
+                    {% for item in order.orderitem_set.all %}
+                    <li>
+                        <p><strong>Product:</strong> {{ item.product.name }}</p>
+                        <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                        <p><strong>Price:</strong> ₹{{ item.price }}</p>
+                    </li>
+                    {% endfor %}
+                </ul>
+                <p class="total-price">Total Price: ₹{{ order.total_price }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>

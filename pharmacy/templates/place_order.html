@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Order</title>
+            <style>
+                /* General Reset */
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+        
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f7f7f7;
+                    color: #333;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh;
+                    margin: 0;
+                    flex-direction: column;
+                }
+        
+                h1, h2 {
+                    color: #333;
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+        
+                h2 {
+                    font-size: 1.5rem;
+                }
+        
+                /* Container Styles */
+                .container {
+                    background-color: #fff;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    width: 80%;
+                    max-width: 600px;
+                    padding: 30px;
+                    text-align: center;
+                    margin-bottom: 20px;
+                }
+        
+                /* Button Styles */
+                button {
+                    padding: 12px 25px;
+                    border: none;
+                    border-radius: 5px;
+                    background-color: #28a745;
+                    color: white;
+                    font-size: 1rem;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                }
+        
+                button:hover {
+                    background-color: #218838;
+                }
+        
+                button:focus {
+                    outline: none;
+                }
+        
+                /* Styles for dialog container */
+                .dialog-container {
+                    display: none;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    z-index: 1000;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+        
+                /* Styles for dialog box */
+                .dialog-box {
+                    background-color: #fff;
+                    padding: 30px;
+                    border-radius: 8px;
+                    width: 100%;
+                    max-width: 500px;
+                    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+                    animation: fadeIn 0.3s ease;
+                }
+        
+                /* Fade-in Animation */
+                @keyframes fadeIn {
+                    0% { opacity: 0; }
+                    100% { opacity: 1; }
+                }
+        
+                /* Form styling */
+                .shipping-form {
+                    display: flex;
+                    flex-direction: column;
+                }
+        
+                .form-field {
+                    margin-bottom: 15px;
+                }
+        
+                .form-field label {
+                    font-size: 1rem;
+                    margin-bottom: 5px;
+                }
+        
+                .form-field input {
+                    padding: 12px;
+                    font-size: 1rem;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    width: 100%;
+                    transition: border-color 0.3s;
+                }
+        
+                .form-field input:focus {
+                    border-color: #28a745;
+                    outline: none;
+                }
+        
+                /* Shipping addresses section */
+                #submitted-details {
+                    margin-top: 30px;
+                }
+        
+                #shipping-addresses {
+                    list-style: none;
+                    padding: 0;
+                    margin-top: 20px;
+                }
+        
+                #shipping-addresses li {
+                    background-color: #fff;
+                    padding: 15px;
+                    margin-bottom: 10px;
+                    border-radius: 5px;
+                    box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+                    position: relative;
+                }
+        
+                #shipping-addresses li div {
+                    margin-bottom: 10px;
+                }
+        
+                .delete-btn {
+                    background-color: #dc3545;
+                    color: white;
+                    padding: 5px 12px;
+                    border-radius: 5px;
+                    border: none;
+                    cursor: pointer;
+                    position: absolute;
+                    right: 10px;
+                    top: 10px;
+                }
+        
+                .delete-btn:hover {
+                    background-color: #c82333;
+                }
+        
+                /* Footer section */
+                .footer {
+                    text-align: center;
+                    margin-top: 20px;
+                    font-size: 1.2rem;
+                }
+        
+                /* Media Query for mobile responsiveness */
+                @media (max-width: 768px) {
+                    .container {
+                        width: 95%;
+                        padding: 20px;
+                    }
+        
+                    .dialog-box {
+                        width: 90%;
+                        padding: 20px;
+                    }
+        
+                    h1 {
+                        font-size: 1.5rem;
+                    }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Place Order</h1>
+                <!-- Button to add shipping details -->
+                <button id="add-shipping-details">Add Shipping Details</button>
+            
+                <!-- Display submitted shipping details here -->
+                <div id="submitted-details">
+                    <h2>Existing Shipping Addresses</h2>
+                    <ul id="shipping-addresses">
+                        <!-- Existing shipping addresses will be populated here -->
+                    </ul>
+                </div>
+        
+                <div class="footer">
+                    <h2>Total: ₹{{ total_amount }}</h2>
+                    <form id="place-order-form">
+                        <button type="submit">Place Order</button>
+                    </form>
+                </div>
+            </div>
+        
+            <!-- Dialog container for shipping details -->
+            <div class="dialog-container" id="shipping-dialog">
+                <div class="dialog-box">
+                    <h2>Add Shipping Details</h2>
+                    <!-- Form for shipping details -->
+                    <form class="shipping-form">
+                        <div class="form-field">
+                            <label for="name">Name:</label>
+                            <input type="text" name="name" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="contact">Contact Details:</label>
+                            <input type="text" name="contact" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="address">Address:</label>
+                            <input type="text" name="address" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="address2">Address Line 2:</label>
+                            <input type="text" name="address2">
+                        </div>
+                        <div class="form-field">
+                            <label for="city">City:</label>
+                            <input type="text" name="city" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="pincode">Pincode:</label>
+                            <input type="text" name="pincode" required>
+                        </div>
+                        <div class="form-field">
+                            <label for="state">State:</label>
+                            <input type="text" name="state" required>
+                        </div>
+                        <!-- Add other shipping details fields as needed -->
+                        <button type="submit" id="save-shipping-details">Save Shipping Details</button>
+                    </form>
+                </div>
+            </div>        
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Function to fetch and display shipping addresses
+            function fetchShippingAddresses() {
+                fetch("/fetch-shipping-addresses/")
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const shippingAddresses = document.getElementById("shipping-addresses");
+                        shippingAddresses.innerHTML = ""; // Clear existing addresses
+                        data.forEach((address) => {
+                            const listItem = document.createElement("li");
+                            listItem.innerHTML = `
+                                <div>${address.name}, ${address.contact}
+                                    <input type="radio" id="radio${address.id}" name="shipping_address" value="${address.id}" checked>
+                                    <br>${address.address}, ${address.address2 ? address.address2 + ", " : ""}${address.city}, ${address.state}, India - ${address.pincode}
+                                </div>
+                                <button class="delete-btn" data-id="${address.id}">Delete</button>
+                            `;
+                            shippingAddresses.appendChild(listItem);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error("Error fetching shipping addresses:", error);
+                    });
+            }
+
+            // Fetch and display shipping addresses when the page loads
+            fetchShippingAddresses();
+
+            // Function to get CSRF token from cookies
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== "") {
+                    const cookies = document.cookie.split(";");
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+
+                        if (cookie.substring(0, name.length + 1) === name + "=") {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            // Handle shipping form submission
+            const saveShippingDetailsBtn = document.getElementById("save-shipping-details");
+            saveShippingDetailsBtn.addEventListener("click", function (event) {
+                event.preventDefault();
+                
+                // Validate the name field
+                const nameInput = document.querySelector("input[name='name']");
+                const nameValue = nameInput.value.trim();
+                if (nameValue === "") {
+                    alert("Please enter your name.");
+                    return;
+                }
+                
+                // Proceed with saving shipping details
+                const formData = new FormData(document.querySelector(".shipping-form"));
+                fetch("/save-shipping-address/", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": getCookie("csrftoken"),
+                    },
+                    body: formData,
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        // Clear and reload shipping addresses after successful save
+                        fetchShippingAddresses();
+                        document.getElementById("shipping-dialog").style.display = "none";
+                        document.querySelector(".shipping-form").reset();
+                    } else {
+                        alert("Failed to save shipping address.");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error saving shipping address:", error);
+                    alert("An error occurred while saving shipping address.");
+                });
+            });
+
+            // Event delegation to handle delete button click
+            document.getElementById("submitted-details").addEventListener("click", function (event) {
+                if (event.target.classList.contains("delete-btn")) {
+                    const addressId = event.target.dataset.id;
+                    fetch(`/delete-shipping-address/${addressId}/`, {
+                        method: "DELETE",
+                        headers: {
+                            "X-CSRFToken": getCookie("csrftoken"),
+                        },
+                    })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            // Clear and reload shipping addresses after successful delete
+                            fetchShippingAddresses();
+                        } else {
+                            alert("Failed to delete shipping address.");
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting shipping address:", error);
+                        alert("An error occurred while deleting shipping address.");
+                    });
+                }
+            });
+
+            // Open shipping dialog on button click
+            const addShippingDetailsBtn = document.getElementById("add-shipping-details");
+            const shippingDialog = document.getElementById("shipping-dialog");
+            addShippingDetailsBtn.addEventListener("click", function () {
+                shippingDialog.style.display = "block";
+            });
+
+            // Close dialog box when clicking outside of it
+            window.addEventListener("click", function (event) {
+                if (event.target === shippingDialog) {
+                    shippingDialog.style.display = "none";
+                }
+            });
+
+            // Handle place order form submission
+            const placeOrderForm = document.getElementById("place-order-form");
+            placeOrderForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+                
+                // Get the selected shipping address
+                const selectedShippingAddressId = document.querySelector("input[name='shipping_address']:checked").value;
+                const requestData = {
+                    shipping_address_id: selectedShippingAddressId
+                };
+                
+                fetch("/place_order_and_update", {
+                    method: "POST",
+                    headers: {
+                        "X-CSRFToken": getCookie("csrftoken"),
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(requestData)
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.success) {
+                        alert("Order placed successfully.");
+                    } else {
+                        alert("Failed to place order: " + data.error);
+                    }
+                })
+                .catch((error) => {
+                    console.error("Failed to place order:", error);
+                    alert("An error occurred while placing the order.");
+                });
+            });
+        });
+    </script>
+</body>
+</html>
